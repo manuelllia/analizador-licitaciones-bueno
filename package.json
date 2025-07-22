@@ -13,7 +13,7 @@
     "react": "^19.1.0",
     "react-dropzone": "^14.3.8",
     "@google/genai": "^1.8.0",
-    "pdfjs-dist": "latest"
+    "pdfjs-dist": "4.4.168"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
