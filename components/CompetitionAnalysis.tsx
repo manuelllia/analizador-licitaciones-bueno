@@ -416,13 +416,13 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
 
     return (
         <div className="space-y-8">
-             <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-800">Análisis de Costes</h2>
-                <p className="mt-2 text-slate-600 max-w-3xl mx-auto">Introduzca los datos de su oferta, simule un competidor y analice los costes y márgenes para determinar su oferta económica.</p>
+             <div className="text-center px-2">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Análisis de Costes</h2>
+                <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-3xl mx-auto">Introduzca los datos de su oferta, simule un competidor y analice los costes y márgenes para determinar su oferta económica.</p>
             </div>
             
             <InputGroup title="Parámetros de la Licitación">
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                      <NumberInput label="Presupuesto Base (sin IVA)" name="tenderBudget" value={settings.tenderBudget} onChange={handleSettingsChange} placeholder="Ej: 100000" />
                      <NumberInput label="Puntuación Económica Máx." name="maxEconomicScore" value={settings.maxEconomicScore} onChange={handleSettingsChange} unit="puntos" />
                      <NumberInput label="Tipo de IVA" name="vatPercent" value={settings.vatPercent} onChange={handleSettingsChange} unit="%" />
@@ -441,13 +441,13 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
                 )}
             </InputGroup>
 
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
                 <InputGroup title="Nuestra Oferta">
                     <OfferForm offer={ourOffer} onChange={handleOurOfferChange} />
                 </InputGroup>
                 
                 <InputGroup title="Análisis de Competidor Hipotético">
-                    <p className="text-sm text-slate-600 -mt-2">Simule la oferta de un competidor basándose en un porcentaje de bajada sobre el presupuesto.</p>
+                    <p className="text-xs sm:text-sm text-slate-600 -mt-2">Simule la oferta de un competidor basándose en un porcentaje de bajada sobre el presupuesto.</p>
                     
                     <NumberInput 
                         label="Porcentaje de Bajada"
@@ -493,10 +493,10 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
                 </InputGroup>
             </div>
             
-            <div className="bg-slate-50 p-6 rounded-xl shadow-inner border">
-                 <h3 className="text-2xl font-bold text-gray-800 text-center mb-6">Resultados del Análisis</h3>
+            <div className="bg-slate-50 p-4 sm:p-6 rounded-xl shadow-inner border">
+                 <h3 className="text-xl sm:text-2xl font-bold text-gray-800 text-center mb-4 sm:mb-6">Resultados del Análisis</h3>
                  
-                 <div className="grid md:grid-cols-2 gap-8">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                     <div className="space-y-3">
                          <ResultsSummaryTable
                             title="Nuestra Oferta"
@@ -529,45 +529,45 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
                     </div>
                  </div>
 
-                 <div className="mt-8 bg-white p-5 rounded-lg shadow-md border max-w-3xl mx-auto">
-                    <h4 className="font-bold text-xl text-teal-800 text-center mb-4">Tabla Comparativa de Puntuaciones</h4>
+                 <div className="mt-6 sm:mt-8 bg-white p-4 sm:p-5 rounded-lg shadow-md border max-w-3xl mx-auto">
+                    <h4 className="font-bold text-lg sm:text-xl text-teal-800 text-center mb-4">Tabla Comparativa de Puntuaciones</h4>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-center">
+                        <table className="w-full text-center text-sm sm:text-base">
                             <thead className="bg-slate-100">
                                 <tr>
-                                    <th className="p-3 font-semibold text-slate-700 text-left">Concepto</th>
-                                    <th className="p-3 font-semibold text-slate-700">Nuestra Oferta</th>
-                                    <th className="p-3 font-semibold text-slate-700">Competidor</th>
+                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-left text-xs sm:text-sm">Concepto</th>
+                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-xs sm:text-sm">Nuestra Oferta</th>
+                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-xs sm:text-sm">Competidor</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr className="border-b">
-                                    <td className="p-3 text-left">Puntuación Técnica</td>
-                                    <td className="p-3 font-medium">{p(ourOffer.technicalScore).toFixed(2)}</td>
-                                    <td className="p-3 font-medium">{p(competitorTechnicalScore).toFixed(2)}</td>
+                                    <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">Puntuación Técnica</td>
+                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{p(ourOffer.technicalScore).toFixed(2)}</td>
+                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{p(competitorTechnicalScore).toFixed(2)}</td>
                                 </tr>
                                 <tr className="border-b">
-                                    <td className="p-3 text-left">Puntuación Económica</td>
-                                    <td className="p-3 font-medium">{ourEconomicScore.toFixed(2)}</td>
-                                    <td className="p-3 font-medium">{competitorEconomicScore.toFixed(2)}</td>
+                                    <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">Puntuación Económica</td>
+                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{ourEconomicScore.toFixed(2)}</td>
+                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{competitorEconomicScore.toFixed(2)}</td>
                                 </tr>
                                 <tr className="bg-slate-50">
-                                    <td className="p-3 text-left font-bold text-teal-800">PUNTUACIÓN TOTAL</td>
-                                    <td className={`p-3 font-bold text-xl text-teal-700 ${winner === 'our' ? 'bg-teal-100' : ''}`}>{ourTotalScore.toFixed(2)}</td>
-                                    <td className={`p-3 font-bold text-xl text-teal-700 ${winner === 'competitor' ? 'bg-teal-100' : ''}`}>{competitorTotalScore.toFixed(2)}</td>
+                                    <td className="p-2 sm:p-3 text-left font-bold text-teal-800 text-xs sm:text-sm">PUNTUACIÓN TOTAL</td>
+                                    <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${winner === 'our' ? 'bg-teal-100' : ''}`}>{ourTotalScore.toFixed(2)}</td>
+                                    <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${winner === 'competitor' ? 'bg-teal-100' : ''}`}>{competitorTotalScore.toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div className="mt-6 text-center">
-                        <h4 className="font-bold text-lg text-teal-800">Veredicto</h4>
-                        <p className="text-slate-600 mt-1 flex items-center justify-center gap-2">
+                    <div className="mt-4 sm:mt-6 text-center">
+                        <h4 className="font-bold text-base sm:text-lg text-teal-800">Veredicto</h4>
+                        <p className="text-slate-600 mt-1 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-base">
                             {winner === 'our' && <> <TrophyIcon className="w-6 h-6 text-yellow-500"/> <span>Con los datos actuales, <strong>nuestra oferta ganaría</strong>.</span></>}
                             {winner === 'competitor' && 'La oferta simulada de la competencia parece más fuerte y probablemente ganaría la licitación.'}
                             {winner === 'none' && 'Introduzca los datos para ver un veredicto.'}
                         </p>
                     </div>
-                     <div className={`mt-3 text-center text-lg font-semibold rounded-lg p-2 ${ourResults.profitMargin >= 3 ? 'text-green-700 bg-green-100' : 'text-orange-700 bg-orange-100'}`}>
+                     <div className={`mt-3 text-center text-sm sm:text-base md:text-lg font-semibold rounded-lg p-2 ${ourResults.profitMargin >= 3 ? 'text-green-700 bg-green-100' : 'text-orange-700 bg-orange-100'}`}>
                         Margen de beneficio de nuestra oferta: {ourResults.profitMargin.toFixed(2)}%
                      </div>
                  </div>

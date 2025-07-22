@@ -13,8 +13,8 @@ const formatAsEuros = (value: string | undefined) => {
 };
 
 const ReportSection: React.FC<ReportSectionProps> = ({ title, children }) => (
-  <div className="bg-white p-6 rounded-xl shadow-lg border border-slate-200/80 mb-8">
-    <h3 className="text-xl font-bold text-teal-700 mb-5 border-b-2 border-teal-100 pb-3">{title}</h3>
+  <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200/80 mb-6 sm:mb-8">
+    <h3 className="text-lg sm:text-xl font-bold text-teal-700 mb-4 sm:mb-5 border-b-2 border-teal-100 pb-3">{title}</h3>
     <div className="space-y-1">{children}</div>
   </div>
 );
@@ -25,18 +25,18 @@ interface DataRowProps {
 }
 
 const DataRow: React.FC<DataRowProps> = ({ label, value }) => (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-1 py-3 border-b border-slate-100 last:border-b-0">
-        <p className="text-sm font-semibold text-slate-600 md:col-span-1">{label}</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-1 py-2 sm:py-3 border-b border-slate-100 last:border-b-0">
+        <p className="text-xs sm:text-sm font-semibold text-slate-600 md:col-span-1">{label}</p>
         <div className="md:col-span-2">
-            { value ? (typeof value === 'string' ? <p className="text-base text-slate-800">{value}</p> : value) : <p className="text-base text-slate-400 italic">No especificado</p> }
+            { value ? (typeof value === 'string' ? <p className="text-sm sm:text-base text-slate-800">{value}</p> : value) : <p className="text-sm sm:text-base text-slate-400 italic">No especificado</p> }
         </div>
     </div>
 );
 
 const EconomicDataRow: React.FC<{ label: string, value?: string }> = ({ label, value }) => (
     <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{label}</p>
-        { value ? <p className="text-sm text-slate-800">{value}</p> : <p className="text-sm text-slate-400 italic">No especificado</p> }
+        <p className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">{label}</p>
+        { value ? <p className="text-xs sm:text-sm text-slate-800">{value}</p> : <p className="text-xs sm:text-sm text-slate-400 italic">No especificado</p> }
     </div>
 );
 
@@ -87,16 +87,16 @@ const GeneralReportSections: React.FC<{ report: ReportData }> = ({ report }) => 
             </ReportSection>
             
             <ReportSection title="Análisis Económico Detallado">
-                <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-6 mb-8 text-center shadow-inner">
-                    <p className="text-sm font-semibold text-teal-800 uppercase tracking-wider">Presupuesto Base de Licitación (sin IVA)</p>
-                    <p className="text-4xl font-extrabold text-teal-700 mt-2">
+                <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 text-center shadow-inner">
+                    <p className="text-xs sm:text-sm font-semibold text-teal-800 uppercase tracking-wider">Presupuesto Base de Licitación (sin IVA)</p>
+                    <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-teal-700 mt-2">
                         {formatAsEuros(analisisEconomico?.presupuestoBaseLicitacion)}
                     </p>
                 </div>
                 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="p-5 border rounded-lg bg-slate-50/70 space-y-3 flex flex-col h-full">
-                        <h4 className="font-bold text-md text-teal-800 border-b pb-2 mb-3">Personal</h4>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="p-4 sm:p-5 border rounded-lg bg-slate-50/70 space-y-3 flex flex-col h-full">
+                        <h4 className="font-bold text-sm sm:text-base text-teal-800 border-b pb-2 mb-3">Personal</h4>
                         <div className="flex-grow space-y-3">
                             <EconomicDataRow label="Número Total de Trabajadores" value={analisisEconomico?.personal?.totalTrabajadores} />
                             <EconomicDataRow label="Desglose por Puesto" value={analisisEconomico?.personal?.desglosePorPuesto} />
@@ -104,26 +104,26 @@ const GeneralReportSections: React.FC<{ report: ReportData }> = ({ report }) => 
                             <EconomicDataRow label="Dedicación Estimada" value={analisisEconomico?.personal?.dedicacion} />
                         </div>
                         <div className="mt-auto pt-4 border-t border-slate-200">
-                            <p className="text-sm font-semibold text-teal-700 uppercase tracking-wider">Costes Salariales Estimados (Anual)</p>
-                            <p className="text-2xl font-bold text-teal-600 mt-1">
+                            <p className="text-xs sm:text-sm font-semibold text-teal-700 uppercase tracking-wider">Costes Salariales Estimados (Anual)</p>
+                            <p className="text-xl sm:text-2xl font-bold text-teal-600 mt-1">
                                 {formatAsEuros(analisisEconomico?.personal?.costesEstimados)}
                             </p>
                         </div>
                     </div>
-                    <div className="p-5 border rounded-lg bg-slate-50/70 space-y-3 h-full">
-                        <h4 className="font-bold text-md text-teal-800 border-b pb-2 mb-3">Compras</h4>
+                    <div className="p-4 sm:p-5 border rounded-lg bg-slate-50/70 space-y-3 h-full">
+                        <h4 className="font-bold text-sm sm:text-base text-teal-800 border-b pb-2 mb-3">Compras</h4>
                         <EconomicDataRow label="Equipamiento Necesario" value={analisisEconomico?.compras?.equipamiento} />
                         <EconomicDataRow label="Consumibles" value={analisisEconomico?.compras?.consumibles} />
                         <EconomicDataRow label="Repuestos" value={analisisEconomico?.compras?.repuestos} />
                     </div>
-                    <div className="p-5 border rounded-lg bg-slate-50/70 space-y-3 h-full">
-                        <h4 className="font-bold text-md text-teal-800 border-b pb-2 mb-3">Subcontrataciones</h4>
+                    <div className="p-4 sm:p-5 border rounded-lg bg-slate-50/70 space-y-3 h-full">
+                        <h4 className="font-bold text-sm sm:text-base text-teal-800 border-b pb-2 mb-3">Subcontrataciones</h4>
                         <EconomicDataRow label="Servicios Externalizables" value={analisisEconomico?.subcontrataciones?.servicios} />
                         <EconomicDataRow label="Límites de Subcontratación" value={analisisEconomico?.subcontrataciones?.limites} />
                         <EconomicDataRow label="Costes Estimados" value={analisisEconomico?.subcontrataciones?.costes} />
                     </div>
-                    <div className="p-5 border rounded-lg bg-slate-50/70 space-y-3 h-full">
-                        <h4 className="font-bold text-md text-teal-800 border-b pb-2 mb-3">Otros Gastos</h4>
+                    <div className="p-4 sm:p-5 border rounded-lg bg-slate-50/70 space-y-3 h-full">
+                        <h4 className="font-bold text-sm sm:text-base text-teal-800 border-b pb-2 mb-3">Otros Gastos</h4>
                         <EconomicDataRow label="Seguros" value={analisisEconomico?.otrosGastos?.seguros} />
                         <EconomicDataRow label="Gastos Generales" value={analisisEconomico?.otrosGastos?.generales} />
                         <EconomicDataRow label="Costes Indirectos" value={analisisEconomico?.otrosGastos?.indirectos} />
@@ -151,27 +151,28 @@ const ReportDisplay: React.FC<{ report: ReportData }> = ({ report }) => {
                 <DataRow label="Clasificación CPV" value={objetoLicitacion?.cpv} />
             </ReportSection>
 
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-slate-200/80 mb-8">
-                <h3 className="text-xl font-bold text-teal-700 mb-5 border-b-2 border-teal-100 pb-3">Detalle por Lote</h3>
-                <div className="flex flex-wrap justify-center gap-3">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200/80 mb-6 sm:mb-8">
+                <h3 className="text-lg sm:text-xl font-bold text-teal-700 mb-4 sm:mb-5 border-b-2 border-teal-100 pb-3">Detalle por Lote</h3>
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                     {lotes.map((lot, index) => (
                     <button
                         key={index}
                         onClick={() => setActiveLotIndex(index)}
                         className={`px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 border-2 ${
                         activeLotIndex === index
-                            ? 'bg-teal-500 text-white border-teal-500 shadow'
+                            ? 'bg-teal-500 text-white border-teal-500 shadow-md'
                             : 'bg-white text-slate-700 hover:bg-teal-50 hover:border-teal-400 border-slate-300'
-                        }`}
+                        } py-2 sm:py-3 px-3 sm:px-5 rounded-lg font-medium text-xs sm:text-sm md:text-base inline-flex items-center transition-all duration-200 border-2`}
                         aria-current={activeLotIndex === index}
                     >
-                        {lot.nombre} - {lot.centroAsociado}
+                        <span className="hidden sm:inline">{lot.nombre} - {lot.centroAsociado}</span>
+                        <span className="sm:hidden">{lot.nombre}</span>
                     </button>
                     ))}
                 </div>
                 
-                <div className="mt-6 pt-6 border-t border-slate-200">
-                  <h4 className="text-lg font-bold text-teal-800 mb-4">{activeLot.nombre}: {activeLot.centroAsociado}</h4>
+                <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-200">
+                  <h4 className="text-base sm:text-lg font-bold text-teal-800 mb-4">{activeLot.nombre}: {activeLot.centroAsociado}</h4>
                   <div className="space-y-1">
                     <DataRow label="Descripción del Lote" value={activeLot.descripcion} />
                     <DataRow label="Presupuesto del Lote" value={formatAsEuros(activeLot.presupuesto)} />
@@ -181,21 +182,25 @@ const ReportDisplay: React.FC<{ report: ReportData }> = ({ report }) => {
             </div>
             
             {/* Render all general sections for lot-based tenders as well */}
-            <GeneralReportSections report={report} />
+            <div className="space-y-4 sm:space-y-6">
+                <GeneralReportSections report={report} />
+            </div>
         </div>
     );
   }
 
   // --- Single Tender View (Default) ---
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <ReportSection title="Objeto de la Licitación">
         <DataRow label="Descripción" value={objetoLicitacion?.descripcion} />
         <DataRow label="Clasificación CPV" value={objetoLicitacion?.cpv} />
         <DataRow label="Entidad Contratante" value={objetoLicitacion?.entidad} />
       </ReportSection>
 
-      <GeneralReportSections report={report} />
+      <div className="space-y-4 sm:space-y-6">
+        <GeneralReportSections report={report} />
+      </div>
     </div>
   );
 };

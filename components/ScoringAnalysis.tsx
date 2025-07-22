@@ -97,35 +97,35 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
 
     return (
         <div className="space-y-8">
-            <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-800">Análisis de Puntuación</h2>
-                <p className="mt-2 text-slate-600 max-w-3xl mx-auto">Calcule la puntuación total de su oferta desglosando los criterios económicos, automáticos y subjetivos extraídos del documento.</p>
+            <div className="text-center px-2">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Análisis de Puntuación</h2>
+                <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-3xl mx-auto">Calcule la puntuación total de su oferta desglosando los criterios económicos, automáticos y subjetivos extraídos del documento.</p>
             </div>
             
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-teal-200/50">
-                <h3 className="text-xl font-bold text-gray-800 text-center mb-4">Resumen de Puntuación</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-teal-200/50">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-800 text-center mb-4">Resumen de Puntuación</h3>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-center">
                     <div>
-                        <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Económica</p>
-                        <p className="text-2xl font-bold text-teal-600">{p(economicScore).toFixed(2)}</p>
+                        <p className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">Económica</p>
+                        <p className="text-xl sm:text-2xl font-bold text-teal-600">{p(economicScore).toFixed(2)}</p>
                     </div>
                      <div>
-                        <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Automática</p>
-                        <p className="text-2xl font-bold text-teal-600">{autoScore.toFixed(2)}</p>
+                        <p className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">Automática</p>
+                        <p className="text-xl sm:text-2xl font-bold text-teal-600">{autoScore.toFixed(2)}</p>
                     </div>
                      <div>
-                        <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Subjetiva</p>
-                        <p className="text-2xl font-bold text-teal-600">{subjectiveScore.toFixed(2)}</p>
+                        <p className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">Subjetiva</p>
+                        <p className="text-xl sm:text-2xl font-bold text-teal-600">{subjectiveScore.toFixed(2)}</p>
                     </div>
-                    <div className="col-span-2 md:col-span-1 bg-teal-50 border-2 border-teal-500 rounded-lg py-2">
-                        <p className="text-sm font-bold text-teal-800 uppercase tracking-wider">Total</p>
-                        <p className="text-3xl font-extrabold text-teal-700">{totalScore.toFixed(2)}</p>
+                    <div className="col-span-2 lg:col-span-1 bg-teal-50 border-2 border-teal-500 rounded-lg py-2">
+                        <p className="text-xs sm:text-sm font-bold text-teal-800 uppercase tracking-wider">Total</p>
+                        <p className="text-2xl sm:text-3xl font-extrabold text-teal-700">{totalScore.toFixed(2)}</p>
                     </div>
                 </div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
-                <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+                <div className="space-y-4 sm:space-y-6">
                     <InputGroup title="Puntuación Económica">
                         <NumberInput 
                             label="Puntos obtenidos por oferta económica"
@@ -134,7 +134,7 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                             onChange={(e) => setEconomicScore(e.target.value)}
                             placeholder="Introducir puntuación"
                         />
-                         <p className="text-xs text-slate-500 text-center pt-2">
+                         <p className="text-xs sm:text-sm text-slate-500 text-center pt-2">
                             Puede obtener este valor de la pestaña "Análisis de Costes".
                         </p>
                     </InputGroup>
@@ -143,10 +143,10 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                         <div className="space-y-3">
                             {automaticCriteria.length > 0 ? (
                                 automaticCriteria.map(c => (
-                                    <label key={c.id} htmlFor={`auto-${c.id}`} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 transition-colors cursor-pointer">
-                                        <span className="text-sm text-slate-700">{c.label}</span>
-                                        <div className="flex items-center space-x-3">
-                                            <span className={`font-bold text-sm ${c.achieved ? 'text-teal-600' : 'text-slate-500'}`}>
+                                    <label key={c.id} htmlFor={`auto-${c.id}`} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 transition-colors cursor-pointer gap-2 sm:gap-0">
+                                        <span className="text-xs sm:text-sm text-slate-700 flex-1">{c.label}</span>
+                                        <div className="flex items-center justify-between sm:justify-end space-x-3">
+                                            <span className={`font-bold text-xs sm:text-sm ${c.achieved ? 'text-teal-600' : 'text-slate-500'}`}>
                                                 {c.achieved ? `+${c.points}` : '0'} pts
                                             </span>
                                             <input
@@ -160,7 +160,7 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                                     </label>
                                 ))
                             ) : (
-                                <p className="text-sm text-slate-500 text-center py-4">No se encontraron criterios automáticos en el documento.</p>
+                                <p className="text-xs sm:text-sm text-slate-500 text-center py-4">No se encontraron criterios automáticos en el documento.</p>
                             )}
                         </div>
                     </InputGroup>
@@ -179,7 +179,7 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                             />
                         ))
                     ) : (
-                        <p className="text-sm text-slate-500 text-center py-4">No se encontraron criterios por juicio de valor en el documento.</p>
+                        <p className="text-xs sm:text-sm text-slate-500 text-center py-4">No se encontraron criterios por juicio de valor en el documento.</p>
                     )}
                 </InputGroup>
             </div>

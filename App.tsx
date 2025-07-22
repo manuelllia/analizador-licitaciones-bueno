@@ -196,19 +196,22 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
         <header className="bg-white/80 backdrop-blur-sm shadow-md w-full sticky top-0 z-20 border-b">
-            <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
-                <div className="flex items-center space-x-3">
-                    <img src={logoPath} alt="Logo Analizador de Licitaciones" className="h-12 w-auto" />
+            <nav className="container mx-auto px-3 sm:px-4 md:px-6 py-2 sm:py-3 flex justify-between items-center">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                    <img src={logoPath} alt="Logo Analizador de Licitaciones" className="h-8 sm:h-10 md:h-12 w-auto" />
                 </div>
-                <h1 className="text-xl md:text-2xl font-bold text-teal-800 text-right">Analizador de Licitaciones</h1>
+                <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-teal-800 text-right leading-tight">
+                    <span className="hidden sm:inline">Analizador de Licitaciones</span>
+                    <span className="sm:hidden">Analizador</span>
+                </h1>
             </nav>
         </header>
 
-        <main className="container mx-auto px-6 py-10 flex-grow w-full">
+        <main className="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-10 flex-grow w-full">
             {error && (
-                <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md shadow max-w-4xl mx-auto" role="alert">
+                <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 sm:p-4 mb-4 sm:mb-6 rounded-md shadow max-w-4xl mx-auto" role="alert">
                     <p className="font-bold">Error</p>
-                    <p>{error}</p>
+                    <p className="text-sm sm:text-base">{error}</p>
                 </div>
             )}
 
@@ -221,11 +224,11 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
                         onPptSelect={handlePptSelect}
                         disabled={isLoading}
                     />
-                    <div className="mt-8 text-center">
+                    <div className="mt-6 sm:mt-8 text-center">
                         <button
                             onClick={handleAnalyze}
                             disabled={!canAnalyze || isLoading}
-                            className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold py-2 sm:py-3 px-6 sm:px-8 md:px-10 text-sm sm:text-base rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                         >
                             {isLoading ? 'Analizando...' : 'Analizar Documentos'}
                         </button>
@@ -237,18 +240,18 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
 
             {report && !isLoading && (
                 <div className="max-w-7xl mx-auto">
-                    <div className="bg-white/80 backdrop-blur-sm shadow-md rounded-xl p-2 sm:p-1 sticky top-[85px] z-10 border">
-                        <nav className="flex space-x-1 sm:space-x-2 justify-center" aria-label="Tabs">
+                    <div className="bg-white/80 backdrop-blur-sm shadow-md rounded-xl p-1 sm:p-2 sticky top-[65px] sm:top-[75px] md:top-[85px] z-10 border">
+                        <nav className="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-1 md:space-x-2 justify-center" aria-label="Tabs">
                             <button
                                 onClick={() => setActiveTab('report')}
                                 className={`${
                                     activeTab === 'report'
                                     ? 'bg-teal-500 text-white shadow-md'
                                     : 'text-gray-600 hover:bg-slate-200/60 hover:text-gray-800'
-                                } whitespace-nowrap py-3 px-3 sm:px-5 rounded-lg font-medium text-sm sm:text-base inline-flex items-center transition-all duration-200`}
+                                } whitespace-nowrap py-2 sm:py-3 px-2 sm:px-3 md:px-5 rounded-lg font-medium text-xs sm:text-sm md:text-base inline-flex items-center justify-center transition-all duration-200 w-full sm:w-auto`}
                                 aria-current={activeTab === 'report' ? 'page' : undefined}
                             >
-                                <DocumentIcon className="mr-2 h-5 w-5"/>
+                                <DocumentIcon className="mr-1 sm:mr-2 h-4 sm:h-5 w-4 sm:w-5"/>
                                 Informe
                             </button>
                             <button
@@ -257,11 +260,12 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
                                     activeTab === 'competition'
                                     ? 'bg-teal-500 text-white shadow-md'
                                     : 'text-gray-600 hover:bg-slate-200/60 hover:text-gray-800'
-                                } whitespace-nowrap py-3 px-3 sm:px-5 rounded-lg font-medium text-sm sm:text-base inline-flex items-center transition-all duration-200`}
+                                } whitespace-nowrap py-2 sm:py-3 px-2 sm:px-3 md:px-5 rounded-lg font-medium text-xs sm:text-sm md:text-base inline-flex items-center justify-center transition-all duration-200 w-full sm:w-auto`}
                                 aria-current={activeTab === 'competition' ? 'page' : undefined}
                             >
-                                <CalculatorIcon className="mr-2 h-5 w-5"/>
-                                Análisis de Costes
+                                <CalculatorIcon className="mr-1 sm:mr-2 h-4 sm:h-5 w-4 sm:w-5"/>
+                                <span className="hidden sm:inline">Análisis de Costes</span>
+                                <span className="sm:hidden">Costes</span>
                             </button>
                              <button
                                 onClick={() => setActiveTab('scoring')}
@@ -269,28 +273,30 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
                                     activeTab === 'scoring'
                                     ? 'bg-teal-500 text-white shadow-md'
                                     : 'text-gray-600 hover:bg-slate-200/60 hover:text-gray-800'
-                                } whitespace-nowrap py-3 px-3 sm:px-5 rounded-lg font-medium text-sm sm:text-base inline-flex items-center transition-all duration-200`}
+                                } whitespace-nowrap py-2 sm:py-3 px-2 sm:px-3 md:px-5 rounded-lg font-medium text-xs sm:text-sm md:text-base inline-flex items-center justify-center transition-all duration-200 w-full sm:w-auto`}
                                 aria-current={activeTab === 'scoring' ? 'page' : undefined}
                             >
-                                <ClipboardCheckIcon className="mr-2 h-5 w-5"/>
-                                Análisis de Puntuación
+                                <ClipboardCheckIcon className="mr-1 sm:mr-2 h-4 sm:h-5 w-4 sm:w-5"/>
+                                <span className="hidden sm:inline">Análisis de Puntuación</span>
+                                <span className="sm:hidden">Puntuación</span>
                             </button>
                         </nav>
                     </div>
 
-                    <div className="flex justify-between items-center mt-8 mb-6 gap-4 flex-wrap">
-                        <div className="bg-teal-50 border border-teal-200 text-teal-800 px-4 py-2 rounded-lg text-sm flex-1">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 gap-3 sm:gap-4">
+                        <div className="bg-teal-50 border border-teal-200 text-teal-800 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex-1 w-full sm:w-auto">
                           <span className="font-semibold">Licitación en análisis:</span> {report.objetoLicitacion.descripcion}
                         </div>
                         <button 
                             onClick={handleReset}
-                            className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 shadow-sm hover:shadow-md"
+                            className="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 sm:px-6 text-sm sm:text-base rounded-full transition-colors duration-300 shadow-sm hover:shadow-md w-full sm:w-auto"
                         >
-                            Analizar otra licitación
+                            <span className="hidden sm:inline">Analizar otra licitación</span>
+                            <span className="sm:hidden">Nueva licitación</span>
                         </button>
                     </div>
                     
-                    <div className="mt-6">
+                    <div className="mt-4 sm:mt-6">
                         {activeTab === 'report' && <ReportDisplay report={report} />}
                         {activeTab === 'competition' && <CompetitionAnalysis tenderBudgetFromReport={report.analisisEconomico.presupuestoBaseLicitacion} scoringCriteria={report.criteriosAdjudicacion} recommendedCosts={report.analisisEconomico.costesDetalladosRecomendados} />}
                         {activeTab === 'scoring' && <ScoringAnalysis scoringCriteria={report.criteriosAdjudicacion}/>}
@@ -306,10 +312,15 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
             onSendMessage={handleSendMessage}
             isLoading={isChatLoading}
         />
-        <ChatButton onClick={() => setIsChatOpen(prev => !prev)} />
+        <div className="fixed bottom-4 sm:bottom-6 md:bottom-8 right-4 sm:right-6 md:right-8 z-50">
+            <ChatButton onClick={() => setIsChatOpen(prev => !prev)} />
+        </div>
         
-        <footer className="bg-slate-200 text-center py-4 mt-auto">
-            <p className="text-sm text-slate-600">Analizador de Licitaciones - Impulsado por IA de Google</p>
+        <footer className="bg-slate-200 text-center py-3 sm:py-4 mt-auto">
+            <p className="text-xs sm:text-sm text-slate-600 px-2">
+                <span className="hidden sm:inline">Analizador de Licitaciones - Impulsado por IA de Google</span>
+                <span className="sm:hidden">Impulsado por IA de Google</span>
+            </p>
         </footer>
     </div>
   );
