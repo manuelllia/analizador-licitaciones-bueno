@@ -1,0 +1,6 @@
+{
+  "name": "Analizador de Licitaciones de Electromedicina",
+  "description": "Una aplicación para analizar documentos de licitaciones públicas (PCAP y PPT) de electromedicina en España y generar un informe estructurado utilizando IA.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
