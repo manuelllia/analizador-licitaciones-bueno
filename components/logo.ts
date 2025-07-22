@@ -1,1 +1,1 @@
-export const logoBase64 = "data:image/png;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+export const logoPath = "/MicrosoftTeams-image 1.png";

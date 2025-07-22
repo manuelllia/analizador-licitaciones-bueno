@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
 import SendIcon from './icons/SendIcon';
 import CloseIcon from './icons/CloseIcon';
-import { logoBase64 } from './logo';
+import { logoPath } from './logo';
 
 interface ChatbotProps {
   isOpen: boolean;
@@ -41,7 +41,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onClose, messages, onSendMess
     >
       <header className="flex items-center justify-between p-4 border-b bg-slate-50 rounded-t-2xl">
         <div className="flex items-center space-x-3">
-          <img src={logoBase64} alt="GEE Logo" className="h-8 w-auto" />
+          <img src={logoPath} alt="GEE Logo" className="h-8 w-auto" />
           <h2 id="chatbot-title" className="text-lg font-bold text-teal-800">Asistente de Licitaciones</h2>
         </div>
         <button onClick={onClose} className="text-slate-500 hover:text-slate-800" aria-label="Cerrar chat">

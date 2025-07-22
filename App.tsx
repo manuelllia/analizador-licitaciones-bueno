@@ -10,7 +10,7 @@ import ScoringAnalysis from './components/ScoringAnalysis';
 import Loader from './components/Loader';
 import ChatButton from './components/ChatButton';
 import Chatbot from './components/Chatbot';
-import { logoBase64 } from './components/logo';
+import { logoPath } from './components/logo';
 import { GoogleGenAI, Chat } from '@google/genai';
 import DocumentIcon from './components/icons/DocumentIcon';
 import CalculatorIcon from './components/icons/CalculatorIcon';
@@ -198,7 +198,7 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
         <header className="bg-white/80 backdrop-blur-sm shadow-md w-full sticky top-0 z-20 border-b">
             <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
                 <div className="flex items-center space-x-3">
-                    <img src={logoBase64} alt="Logo Analizador de Licitaciones" className="h-12 w-auto" />
+                    <img src={logoPath} alt="Logo Analizador de Licitaciones" className="h-12 w-auto" />
                 </div>
                 <h1 className="text-xl md:text-2xl font-bold text-teal-800 text-right">Analizador de Licitaciones</h1>
             </nav>
