@@ -75,6 +75,8 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria, init
             setEconomicScore(initialEconomicScore.toFixed(2));
         }
     }, [initialEconomicScore]);
+
+    const handleAutomaticChange = (id: number) => {
         setAutomaticCriteria(prev => 
             prev.map(c => c.id === id ? { ...c, achieved: !c.achieved } : c)
         );
@@ -143,10 +145,7 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria, init
                             placeholder="Introducir puntuación"
                         />
                          <p className="text-xs sm:text-sm text-slate-500 text-center pt-2">
-                            {initialEconomicScore > 0 ? 
-                                'Valor obtenido automáticamente del "Análisis de Costes".' : 
-                                'Puede obtener este valor de la pestaña "Análisis de Costes".'
-                            }
+                            Puede obtener este valor de la pestaña "Análisis de Costes".
                         </p>
                     </InputGroup>
 
