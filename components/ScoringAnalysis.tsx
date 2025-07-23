@@ -145,7 +145,10 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria, init
                             placeholder="Introducir puntuación"
                         />
                          <p className="text-xs sm:text-sm text-slate-500 text-center pt-2">
-                            Puede obtener este valor de la pestaña "Análisis de Costes".
+                            {initialEconomicScore > 0 ? 
+                                'Valor obtenido automáticamente del "Análisis de Costes".' : 
+                                'Puede obtener este valor de la pestaña "Análisis de Costes".'
+                            }
                         </p>
                     </InputGroup>
 
