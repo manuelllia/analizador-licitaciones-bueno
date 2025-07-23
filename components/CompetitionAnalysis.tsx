@@ -227,37 +227,49 @@ const ResultsSummaryTable: React.FC<{
     const diffText = priceDifference >= 0 ? `+${formatCurrency(priceDifference)}` : `${formatCurrency(priceDifference)}`;
 
     return(
-        <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md">
-            <div className="bg-[#a54a00] text-white text-center py-2 font-bold text-sm tracking-wider uppercase">
+        <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md w-full">
+            <div className="bg-[#a54a00] text-white text-center py-2 sm:py-3 font-bold text-xs sm:text-sm tracking-wider uppercase">
                 {title}
             </div>
-            <table className="w-full text-sm">
-                <tbody className="divide-y divide-gray-300">
-                    <tr>
-                        <td className="p-3 bg-[#d9662b] text-white font-bold w-1/3">BAJADA AÑO</td>
-                        <td className="p-3 text-right font-semibold bg-[#f8cbad] text-gray-800">{formatCurrency(discountAmount)}</td>
-                        <td className={`p-3 text-right font-bold text-gray-800 bg-yellow-200 w-1/4`}>{`${discountPercent.toFixed(2)}%`}</td>
-                    </tr>
-                    <tr>
-                        <td className="p-3 bg-[#d9662b] text-white font-bold">OFERTA AÑO</td>
-                        <td className="p-3 text-right font-semibold bg-[#f8cbad] text-gray-800">{formatCurrency(offerAmount)}</td>
-                        <td className="p-3 text-right font-bold bg-orange-200 text-gray-800">{`${economicScore.toFixed(2)} pts`}</td>
-                    </tr>
-                    <tr>
-                        <td className="p-3 bg-[#d9662b] text-white font-bold">OFERTA LICIT. AÑO</td>
-                        <td className="p-3 text-right font-semibold bg-[#f8cbad] text-gray-800">{formatCurrency(tenderBudget)}</td>
-                        <td className={`p-3 text-center font-bold text-xs ${diffColor}`}>
-                            <div>{diffLabel}</div>
-                            <div className="text-sm">{diffText}</div>
-                        </td>
-                    </tr>
-                    <tr className="border-t-2 border-gray-400">
-                        <td className="p-3 bg-[#d9662b] text-white font-bold">MARGEN</td>
-                        <td className="p-3 text-right font-semibold bg-[#f8cbad] text-gray-800">{formatCurrency(estimatedMarginAmount)}</td>
-                        <td className={`p-3 text-right font-bold bg-orange-200 ${estimatedMarginPercent < 0 ? 'text-red-600' : 'text-green-800'}`}>{`${estimatedMarginPercent.toFixed(2)}%`}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div className="overflow-x-auto">
+                <table className="w-full text-xs sm:text-sm min-w-[280px]">
+                    <tbody className="divide-y divide-gray-300">
+                        <tr>
+                            <td className="p-2 sm:p-3 bg-[#d9662b] text-white font-bold text-xs sm:text-sm w-1/3 min-w-[80px]">
+                                <span className="hidden sm:inline">BAJADA AÑO</span>
+                                <span className="sm:hidden">BAJADA</span>
+                            </td>
+                            <td className="p-2 sm:p-3 text-right font-semibold bg-[#f8cbad] text-gray-800 text-xs sm:text-sm break-all">{formatCurrency(discountAmount)}</td>
+                            <td className={`p-2 sm:p-3 text-right font-bold text-gray-800 bg-yellow-200 w-1/4 text-xs sm:text-sm`}>{`${discountPercent.toFixed(2)}%`}</td>
+                        </tr>
+                        <tr>
+                            <td className="p-2 sm:p-3 bg-[#d9662b] text-white font-bold text-xs sm:text-sm">
+                                <span className="hidden sm:inline">OFERTA AÑO</span>
+                                <span className="sm:hidden">OFERTA</span>
+                            </td>
+                            <td className="p-2 sm:p-3 text-right font-semibold bg-[#f8cbad] text-gray-800 text-xs sm:text-sm break-all">{formatCurrency(offerAmount)}</td>
+                            <td className="p-2 sm:p-3 text-right font-bold bg-orange-200 text-gray-800 text-xs sm:text-sm">{`${economicScore.toFixed(2)} pts`}</td>
+                        </tr>
+                        <tr>
+                            <td className="p-2 sm:p-3 bg-[#d9662b] text-white font-bold text-xs sm:text-sm">
+                                <span className="hidden sm:inline">OFERTA LICIT. AÑO</span>
+                                <span className="sm:hidden">LICIT.</span>
+                            </td>
+                            <td className="p-2 sm:p-3 text-right font-semibold bg-[#f8cbad] text-gray-800 text-xs sm:text-sm break-all">{formatCurrency(tenderBudget)}</td>
+                            <td className={`p-2 sm:p-3 text-center font-bold text-xs ${diffColor}`}>
+                                <div className="hidden sm:block">{diffLabel}</div>
+                                <div className="sm:hidden">DIF.</div>
+                                <div className="text-xs sm:text-sm break-all">{diffText}</div>
+                            </td>
+                        </tr>
+                        <tr className="border-t-2 border-gray-400">
+                            <td className="p-2 sm:p-3 bg-[#d9662b] text-white font-bold text-xs sm:text-sm">MARGEN</td>
+                            <td className="p-2 sm:p-3 text-right font-semibold bg-[#f8cbad] text-gray-800 text-xs sm:text-sm break-all">{formatCurrency(estimatedMarginAmount)}</td>
+                            <td className={`p-2 sm:p-3 text-right font-bold bg-orange-200 text-xs sm:text-sm ${estimatedMarginPercent < 0 ? 'text-red-600' : 'text-green-800'}`}>{`${estimatedMarginPercent.toFixed(2)}%`}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
@@ -606,27 +618,39 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
                  <div className="mt-6 sm:mt-8 bg-white p-4 sm:p-5 rounded-lg shadow-md border max-w-3xl mx-auto">
                     <h4 className="font-bold text-lg sm:text-xl text-teal-800 text-center mb-4">Tabla Comparativa de Puntuaciones</h4>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-center text-sm sm:text-base">
+                        <table className="w-full text-center text-sm sm:text-base min-w-[300px]">
                             <thead className="bg-slate-100">
                                 <tr>
-                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-left text-xs sm:text-sm">Concepto</th>
-                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-xs sm:text-sm">Nuestra Oferta</th>
-                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-xs sm:text-sm">Competidor</th>
+                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-left text-xs sm:text-sm min-w-[100px]">Concepto</th>
+                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-xs sm:text-sm min-w-[80px]">
+                                        <span className="hidden sm:inline">Nuestra Oferta</span>
+                                        <span className="sm:hidden">Nuestra</span>
+                                    </th>
+                                    <th className="p-2 sm:p-3 font-semibold text-slate-700 text-xs sm:text-sm min-w-[80px]">Competidor</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr className="border-b">
-                                    <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">Puntuación Técnica</td>
+                                    <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">
+                                        <span className="hidden sm:inline">Puntuación Técnica</span>
+                                        <span className="sm:hidden">Técnica</span>
+                                    </td>
                                     <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{p(ourOffer.technicalScore).toFixed(2)}</td>
                                     <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{p(competitorTechnicalScore).toFixed(2)}</td>
                                 </tr>
                                 <tr className="border-b">
-                                    <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">Puntuación Económica</td>
+                                    <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">
+                                        <span className="hidden sm:inline">Puntuación Económica</span>
+                                        <span className="sm:hidden">Económica</span>
+                                    </td>
                                     <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{ourEconomicScore.toFixed(2)}</td>
                                     <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{competitorEconomicScore.toFixed(2)}</td>
                                 </tr>
                                 <tr className="bg-slate-50">
-                                    <td className="p-2 sm:p-3 text-left font-bold text-teal-800 text-xs sm:text-sm">PUNTUACIÓN TOTAL</td>
+                                    <td className="p-2 sm:p-3 text-left font-bold text-teal-800 text-xs sm:text-sm">
+                                        <span className="hidden sm:inline">PUNTUACIÓN TOTAL</span>
+                                        <span className="sm:hidden">TOTAL</span>
+                                    </td>
                                     <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${winner === 'our' ? 'bg-teal-100' : ''}`}>{ourTotalScore.toFixed(2)}</td>
                                     <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${winner === 'competitor' ? 'bg-teal-100' : ''}`}>{competitorTotalScore.toFixed(2)}</td>
                                 </tr>

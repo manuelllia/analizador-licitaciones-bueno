@@ -95,6 +95,22 @@ Tu tarea más crítica es actuar como un estratega de licitaciones. No te limite
     *   El campo \`costePersonal\` debe reflejar el coste de todo el personal requerido en el documento.
     *   Rellena todos los demás campos (\`vehiculos\`, \`materialIncluido\`, etc.) de forma lógica para llegar al total.
 
+**ANÁLISIS CRÍTICO DE COSTES SALARIALES:**
+Para el campo \`costesEstimados\` del personal, realiza un análisis detallado y realista:
+1. **Identifica el número exacto de trabajadores** requeridos en el documento
+2. **Calcula salarios anuales realistas** para cada puesto:
+   - Técnicos de electromedicina: 25.000-35.000€ anuales
+   - Ingenieros biomédicos: 35.000-50.000€ anuales
+   - Responsables/coordinadores: 40.000-60.000€ anuales
+   - Personal administrativo: 20.000-30.000€ anuales
+3. **Incluye cargas sociales** (aproximadamente 30% adicional sobre salario bruto)
+4. **Multiplica por el número de trabajadores** de cada categoría
+5. **El resultado debe ser un valor numérico realista** (ej: "180000" para 5 trabajadores)
+
+**EJEMPLO DE CÁLCULO:**
+- 2 Técnicos: 2 × 30.000€ × 1.30 (cargas) = 78.000€
+- 1 Ingeniero: 1 × 45.000€ × 1.30 = 58.500€
+- Total anual: 136.500€ → Valor a incluir: "136500"
 **En resumen, para \`costesDetalladosRecomendados\`, no me des una estimación de los costes reales, sino el desglose de una oferta económica optimizada y estratégica que nos recomiendas presentar.**
 
 Regla general: Si un dato no se encuentra, usa "No especificado en los documentos" para strings y arrays vacíos para listas. Para los costes recomendados, omite los campos que no puedas estimar.
