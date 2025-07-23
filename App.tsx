@@ -38,6 +38,13 @@ const App: React.FC = () => {
   const [hasWelcomed, setHasWelcomed] = useState(false);
   const chatInstance = useRef<Chat | null>(null);
 
+  // Economic score sharing between tabs
+  const [sharedEconomicScore, setSharedEconomicScore] = useState<number>(0);
+
+  // Error popup state
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   useEffect(() => {
     if (isChatOpen && !hasWelcomed && chatHistory.length === 0) {
       setChatHistory([{ role: 'model', text: 'Hola, soy tu asistente experto en licitaciones de electromedicina. Puedes hacerme preguntas generales o cargar los documentos de una licitación para un análisis detallado.' }]);
@@ -105,7 +112,15 @@ const App: React.FC = () => {
       setChatHistory([{ role: 'model', text: '¡Análisis completo! Ahora puedes hacerme preguntas específicas sobre los documentos que has cargado o usar la pestaña de "Análisis de Competencia".' }]);
       setHasWelcomed(true);
     } catch (err: any) {
-      setError(err.message || 'Ocurrió un error inesperado durante el análisis.');
+      const errorMsg = err.message || 'Ocurrió un error inesperado durante el análisis.';
+      
+      // Check for rate limit or quota exceeded errors
+      if (errorMsg.includes('quota') || errorMsg.includes('rate limit') || errorMsg.includes('429') || errorMsg.includes('RATE_LIMIT_EXCEEDED')) {
+        setErrorMessage('Has alcanzado el límite de uso de la API. Por favor, inténtalo de nuevo en unos minutos.');
+        setShowErrorPopup(true);
+      } else {
+        setError(errorMsg);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -185,7 +200,14 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
 
     } catch (err) {
       console.error("Chat error:", err);
-      setChatHistory(prev => [...prev, { role: 'model', text: 'Lo siento, he encontrado un error al procesar tu solicitud. Por favor, inténtalo de nuevo.' }]);
+      const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+      
+      if (errorMsg.includes('quota') || errorMsg.includes('rate limit') || errorMsg.includes('429') || errorMsg.includes('RATE_LIMIT_EXCEEDED')) {
+        setErrorMessage('Has alcanzado el límite de uso de la API. Por favor, inténtalo de nuevo en unos minutos.');
+        setShowErrorPopup(true);
+      } else {
+        setChatHistory(prev => [...prev, { role: 'model', text: 'Lo siento, he encontrado un error al procesar tu solicitud. Por favor, inténtalo de nuevo.' }]);
+      }
     } finally {
       setIsChatLoading(false);
     }
@@ -298,12 +320,35 @@ Además de conocer la aplicación, también eres un experto en licitaciones púb
                     
                     <div className="mt-4 sm:mt-6">
                         {activeTab === 'report' && <ReportDisplay report={report} />}
-                        {activeTab === 'competition' && <CompetitionAnalysis tenderBudgetFromReport={report.analisisEconomico.presupuestoBaseLicitacion} scoringCriteria={report.criteriosAdjudicacion} recommendedCosts={report.analisisEconomico.costesDetalladosRecomendados} />}
-                        {activeTab === 'scoring' && <ScoringAnalysis scoringCriteria={report.criteriosAdjudicacion}/>}
+                        {activeTab === 'competition' && <CompetitionAnalysis tenderBudgetFromReport={report.analisisEconomico.presupuestoBaseLicitacion} scoringCriteria={report.criteriosAdjudicacion} recommendedCosts={report.analisisEconomico.costesDetalladosRecomendados} onEconomicScoreChange={setSharedEconomicScore} />}
+                        {activeTab === 'scoring' && <ScoringAnalysis scoringCriteria={report.criteriosAdjudicacion} initialEconomicScore={sharedEconomicScore} />}
                     </div>
                 </div>
             )}
         </main>
+        
+        {/* Error Popup */}
+        {showErrorPopup && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
+                    <div className="p-6 text-center">
+                        <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-100 mb-4">
+                            <svg className="h-8 w-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Límite de API Alcanzado</h3>
+                        <p className="text-sm text-gray-600 mb-6">{errorMessage}</p>
+                        <button
+                            onClick={() => setShowErrorPopup(false)}
+                            className="w-full bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-semibold py-3 px-6 rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                        >
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
         
         <Chatbot 
             isOpen={isChatOpen}

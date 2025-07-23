@@ -5,8 +5,7 @@ import ChevronDownIcon from './icons/ChevronDownIcon';
 
 interface ScoringAnalysisProps {
     scoringCriteria?: CriteriosAdjudicacion;
-  contexto?: string;
-  requisitos?: string;
+    initialEconomicScore?: number;
 }
 
 const InputGroup: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
@@ -44,7 +43,7 @@ const NumberInput: React.FC<{
     </div>
 );
 
-const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) => {
+const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria, initialEconomicScore = 0 }) => {
     const [economicScore, setEconomicScore] = useState('');
     const [automaticCriteria, setAutomaticCriteria] = useState<AutomaticCriterion[]>([]);
     const [subjectiveCriteria, setSubjectiveCriteria] = useState<SubjectiveCriterion[]>([]);
@@ -70,7 +69,12 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
         }
     }, [scoringCriteria]);
 
-    const handleAutomaticChange = (id: number) => {
+    // Auto-populate economic score from cost analysis
+    useEffect(() => {
+        if (initialEconomicScore > 0) {
+            setEconomicScore(initialEconomicScore.toFixed(2));
+        }
+    }, [initialEconomicScore]);
         setAutomaticCriteria(prev => 
             prev.map(c => c.id === id ? { ...c, achieved: !c.achieved } : c)
         );
@@ -139,7 +143,10 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                             placeholder="Introducir puntuación"
                         />
                          <p className="text-xs sm:text-sm text-slate-500 text-center pt-2">
-                            Puede obtener este valor de la pestaña "Análisis de Costes".
+                            {initialEconomicScore > 0 ? 
+                                'Valor obtenido automáticamente del "Análisis de Costes".' : 
+                                'Puede obtener este valor de la pestaña "Análisis de Costes".'
+                            }
                         </p>
                     </InputGroup>
 

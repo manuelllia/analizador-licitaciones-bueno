@@ -8,6 +8,7 @@ interface CompetitionAnalysisProps {
     tenderBudgetFromReport?: string;
     scoringCriteria?: CriteriosAdjudicacion;
     recommendedCosts?: Partial<OfferInputData>;
+    onEconomicScoreChange?: (score: number) => void;
 }
 
 const initialOfferState: OfferInputData = {
@@ -406,11 +407,10 @@ const calculateEconomicScore = (price: number, tenderBudget: number, maxScore: n
 };
 
 
-const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetFromReport, scoringCriteria, recommendedCosts }) => {
+const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetFromReport, scoringCriteria, recommendedCosts, onEconomicScoreChange }) => {
     const [ourOffer, setOurOffer] = useState<OfferInputData>(initialOfferState);
     const [settings, setSettings] = useState<CompetitionSettings>(initialSettings);
     const [competitorDiscount, setCompetitorDiscount] = useState('15');
-    const [competitorTechnicalScore, setCompetitorTechnicalScore] = useState('45');
 
     useEffect(() => {
         // Set settings from the main report
@@ -487,17 +487,18 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
         };
 
     }, [ourResults.taxableBase, competitorTaxableBase, settings.maxEconomicScore, tenderBudgetNum, scoringCriteria]);
+
+    // Share economic score with parent component
+    useEffect(() => {
+        if (onEconomicScoreChange) {
+            onEconomicScoreChange(ourEconomicScore);
+        }
+    }, [ourEconomicScore, onEconomicScoreChange]);
     
     const competitorCostSubtotal = ourResults.subtotal; // Assumption: competitor has similar costs
     const competitorProfit = competitorTaxableBase - competitorCostSubtotal;
     const competitorMarginPercent = competitorTaxableBase > 0 ? (competitorProfit / competitorTaxableBase) * 100 : 0;
 
-    const ourTotalScore = p(ourOffer.technicalScore) + ourEconomicScore;
-    const competitorTotalScore = p(competitorTechnicalScore) + competitorEconomicScore;
-
-    const winner = ourTotalScore > 0 || competitorTotalScore > 0 
-        ? (ourTotalScore >= competitorTotalScore ? 'our' : 'competitor') 
-        : 'none';
 
 
     return (
@@ -567,14 +568,11 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
                     )}
                     
                     <div className="pt-3 border-t mt-4">
-                        <NumberInput 
-                            label="Puntuación Técnica Estimada"
-                            name="competitorTechnicalScore"
-                            value={competitorTechnicalScore}
-                            onChange={(e) => setCompetitorTechnicalScore(e.target.value)}
-                            unit="puntos"
-                            placeholder="Ej: 45"
-                        />
+                        <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p className="text-sm text-blue-700">
+                                <span className="font-semibold">Nota:</span> Para el análisis completo de puntuación (técnica + económica), utiliza la pestaña "Análisis de Puntuación".
+                            </p>
+                        </div>
                     </div>
                 </InputGroup>
             </div>
@@ -616,7 +614,7 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
                  </div>
 
                  <div className="mt-6 sm:mt-8 bg-white p-4 sm:p-5 rounded-lg shadow-md border max-w-3xl mx-auto">
-                    <h4 className="font-bold text-lg sm:text-xl text-teal-800 text-center mb-4">Tabla Comparativa de Puntuaciones</h4>
+                    <h4 className="font-bold text-lg sm:text-xl text-teal-800 text-center mb-4">Comparativa de Puntuación Económica</h4>
                     <div className="overflow-x-auto">
                         <table className="w-full text-center text-sm sm:text-base min-w-[300px]">
                             <thead className="bg-slate-100">
@@ -630,39 +628,32 @@ const CompetitionAnalysis: React.FC<CompetitionAnalysisProps> = ({ tenderBudgetF
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="border-b">
-                                    <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">
-                                        <span className="hidden sm:inline">Puntuación Técnica</span>
-                                        <span className="sm:hidden">Técnica</span>
-                                    </td>
-                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{p(ourOffer.technicalScore).toFixed(2)}</td>
-                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{p(competitorTechnicalScore).toFixed(2)}</td>
-                                </tr>
-                                <tr className="border-b">
+                                <tr className="bg-slate-50">
                                     <td className="p-2 sm:p-3 text-left text-xs sm:text-sm">
                                         <span className="hidden sm:inline">Puntuación Económica</span>
                                         <span className="sm:hidden">Económica</span>
                                     </td>
-                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{ourEconomicScore.toFixed(2)}</td>
-                                    <td className="p-2 sm:p-3 font-medium text-xs sm:text-sm">{competitorEconomicScore.toFixed(2)}</td>
-                                </tr>
-                                <tr className="bg-slate-50">
-                                    <td className="p-2 sm:p-3 text-left font-bold text-teal-800 text-xs sm:text-sm">
-                                        <span className="hidden sm:inline">PUNTUACIÓN TOTAL</span>
-                                        <span className="sm:hidden">TOTAL</span>
-                                    </td>
-                                    <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${winner === 'our' ? 'bg-teal-100' : ''}`}>{ourTotalScore.toFixed(2)}</td>
-                                    <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${winner === 'competitor' ? 'bg-teal-100' : ''}`}>{competitorTotalScore.toFixed(2)}</td>
+                                    <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${ourEconomicScore >= competitorEconomicScore ? 'bg-teal-100' : ''}`}>{ourEconomicScore.toFixed(2)}</td>
+                                    <td className={`p-2 sm:p-3 font-bold text-lg sm:text-xl text-teal-700 ${competitorEconomicScore > ourEconomicScore ? 'bg-teal-100' : ''}`}>{competitorEconomicScore.toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div className="mt-4 sm:mt-6 text-center">
-                        <h4 className="font-bold text-base sm:text-lg text-teal-800">Veredicto</h4>
+                        <h4 className="font-bold text-base sm:text-lg text-teal-800">Veredicto Económico</h4>
                         <p className="text-slate-600 mt-1 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-base">
-                            {winner === 'our' && <> <TrophyIcon className="w-6 h-6 text-yellow-500"/> <span>Con los datos actuales, <strong>nuestra oferta ganaría</strong>.</span></>}
-                            {winner === 'competitor' && 'La oferta simulada de la competencia parece más fuerte y probablemente ganaría la licitación.'}
-                            {winner === 'none' && 'Introduzca los datos para ver un veredicto.'}
+                            {ourEconomicScore > 0 || competitorEconomicScore > 0 ? (
+                                ourEconomicScore >= competitorEconomicScore ? (
+                                    <> <TrophyIcon className="w-6 h-6 text-yellow-500"/> <span>En puntuación económica, <strong>nuestra oferta es superior</strong>.</span></>
+                                ) : (
+                                    'En puntuación económica, la oferta simulada de la competencia es superior.'
+                                )
+                            ) : (
+                                'Introduzca los datos para ver un veredicto económico.'
+                            )}
+                        </p>
+                        <p className="text-xs sm:text-sm text-slate-500 mt-2">
+                            Para el análisis completo incluyendo puntuación técnica, utiliza la pestaña "Análisis de Puntuación".
                         </p>
                     </div>
                      <div className={`mt-3 text-center text-sm sm:text-base md:text-lg font-semibold rounded-lg p-2 ${ourResults.profitMargin >= 3 ? 'text-green-700 bg-green-100' : 'text-orange-700 bg-orange-100'}`}>
