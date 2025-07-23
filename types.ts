@@ -10,6 +10,8 @@ export interface LotData {
 export interface CriterioDetallado {
   descripcion: string;
   puntuacionMaxima: number;
+  contexto: string;
+  requisitos: string;
 }
 
 export interface CriteriosAdjudicacion {

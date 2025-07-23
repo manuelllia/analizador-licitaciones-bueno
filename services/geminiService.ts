@@ -74,7 +74,11 @@ Busca exhaustivamente en el PCAP la sección que define los criterios de adjudic
     **IMPORTANTE:** Extrae la fórmula EXACTA del documento, no inventes ni simplifiques.
 
 *   'umbralBajaTemeraria': Describe las condiciones para que una oferta sea considerada anormalmente baja o temeraria.
-*   'criteriosAutomaticos': Array con criterios evaluables por fórmula (descripción y puntuación).
+*   'criteriosAutomaticos': Array con criterios evaluables por fórmula. Para cada criterio, proporciona:
+    - 'descripcion': El título o nombre del criterio tal como aparece en el documento
+    - 'puntuacionMaxima': Los puntos máximos asignados
+    - 'contexto': Una explicación detallada de qué significa este criterio, qué debe cumplir el licitador para obtener los puntos, y cualquier información relevante para ayudar al usuario a entender el requisito. Por ejemplo, si es "reducción del tiempo máximo de resolución (urgente)", explica qué tiempo se considera estándar, qué reducción se pide, cómo se mide, etc.
+    - 'requisitos': Los requisitos específicos o condiciones que debe cumplir la oferta para obtener estos puntos
 *   'criteriosSubjetivos': Array con criterios de juicio de valor (descripción y puntuación).
 
 **Instrucción clave para el presupuesto GENERAL:** Busca el "Presupuesto Base de Licitación" (PBL) o "Valor Estimado del Contrato" (VEC) **TOTAL**. Extrae su valor numérico **sin IVA** como una cadena de texto.
@@ -141,9 +145,11 @@ const criterioDetalladoSchema = {
     type: Type.OBJECT,
     properties: {
         descripcion: { type: Type.STRING, description: "La descripción del criterio." },
-        puntuacionMaxima: { type: Type.NUMBER, description: "La puntuación máxima para este criterio." }
+        puntuacionMaxima: { type: Type.NUMBER, description: "La puntuación máxima para este criterio." },
+        contexto: { type: Type.STRING, description: "Explicación detallada del criterio y su propósito." },
+        requisitos: { type: Type.STRING, description: "Requisitos específicos para obtener los puntos." }
     },
-    required: ["descripcion", "puntuacionMaxima"]
+    required: ["descripcion", "puntuacionMaxima", "contexto", "requisitos"]
 };
 
 const offerInputDataSchema = {

@@ -5,6 +5,8 @@ import ChevronDownIcon from './icons/ChevronDownIcon';
 
 interface ScoringAnalysisProps {
     scoringCriteria?: CriteriosAdjudicacion;
+  contexto?: string;
+  requisitos?: string;
 }
 
 const InputGroup: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
@@ -53,7 +55,9 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                 id: index + 1,
                 label: c.descripcion,
                 points: c.puntuacionMaxima,
-                achieved: false
+                achieved: false,
+                contexto: c.contexto,
+                requisitos: c.requisitos
             }));
             const newSubj = scoringCriteria.criteriosSubjetivos.map((c, index) => ({
                 id: index + 1,
@@ -143,21 +147,36 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                         <div className="space-y-3">
                             {automaticCriteria.length > 0 ? (
                                 automaticCriteria.map(c => (
-                                    <label key={c.id} htmlFor={`auto-${c.id}`} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 transition-colors cursor-pointer gap-2 sm:gap-0">
-                                        <span className="text-xs sm:text-sm text-slate-700 flex-1">{c.label}</span>
-                                        <div className="flex items-center justify-between sm:justify-end space-x-3">
-                                            <span className={`font-bold text-xs sm:text-sm ${c.achieved ? 'text-teal-600' : 'text-slate-500'}`}>
-                                                {c.achieved ? `+${c.points}` : '0'} pts
-                                            </span>
-                                            <input
-                                                type="checkbox"
-                                                id={`auto-${c.id}`}
-                                                checked={c.achieved}
-                                                onChange={() => handleAutomaticChange(c.id)}
-                                                className="h-5 w-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
-                                            />
+                                    <div key={c.id} className="bg-slate-50 rounded-lg border hover:bg-slate-100 transition-colors">
+                                        <label htmlFor={`auto-${c.id}`} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 cursor-pointer gap-2 sm:gap-0">
+                                            <div className="flex-1">
+                                                <span className="text-xs sm:text-sm font-semibold text-slate-800 block">{c.label}</span>
+                                                {automaticCriteria.find(ac => ac.id === c.id)?.contexto && (
+                                                    <p className="text-xs text-slate-600 mt-1">{automaticCriteria.find(ac => ac.id === c.id)?.contexto}</p>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center justify-between sm:justify-end space-x-3">
+                                                <span className={`font-bold text-xs sm:text-sm ${c.achieved ? 'text-teal-600' : 'text-slate-500'}`}>
+                                                    {c.achieved ? `+${c.points}` : '0'} pts
+                                                </span>
+                                                <input
+                                                    type="checkbox"
+                                                    id={`auto-${c.id}`}
+                                                    checked={c.achieved}
+                                                    onChange={() => handleAutomaticChange(c.id)}
+                                                    className="h-5 w-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                                                />
+                                            </div>
+                                        </label>
+                                        {automaticCriteria.find(ac => ac.id === c.id)?.requisitos && (
+                                            <div className="px-3 pb-3 border-t border-slate-200 pt-2 mt-2">
+                                                <p className="text-xs text-slate-600">
+                                                    <span className="font-semibold">Requisitos:</span> {automaticCriteria.find(ac => ac.id === c.id)?.requisitos}
+                                                </p>
+                                            </div>
+                                        )}
                                         </div>
-                                    </label>
+                                    </div>
                                 ))
                             ) : (
                                 <p className="text-xs sm:text-sm text-slate-500 text-center py-4">No se encontraron criterios automáticos en el documento.</p>
