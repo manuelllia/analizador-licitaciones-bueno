@@ -263,59 +263,133 @@ const ResultsSummaryTable: React.FC<{
 };
 
 const calculateEconomicScore = (price: number, tenderBudget: number, maxScore: number, lowestPrice: number, formula: string | undefined): number => {
-    // Fallback to simple proportional logic if no formula, or if key values are missing
-    const useFallback = !formula || price <= 0 || tenderBudget <= 0 || maxScore <= 0;
-
-    if (useFallback) {
-        if (lowestPrice > 0 && price > 0 && tenderBudget > 0 && price <= tenderBudget) {
-            return Math.min(maxScore, (lowestPrice / price) * maxScore);
-        }
+    // Enhanced validation
+    if (price <= 0 || tenderBudget <= 0 || maxScore <= 0) {
         return 0;
     }
 
+    // Use fallback formula if no custom formula provided
+    if (!formula || formula.trim() === '') {
+        return lowestPrice > 0 ? Math.min(maxScore, (lowestPrice / price) * maxScore) : 0;
+    }
+
     try {
-        let sanitizedFormula = formula;
+        let sanitizedFormula = formula.trim();
         
-        // Check if the formula from the AI is already in JS format. If so, it will contain 'Math.pow'.
-        // If not, we do our best to sanitize it.
-        if (!formula.includes('Math.pow')) {
-             sanitizedFormula = formula.replace(/\^/g, '**');
-        }
-
-        // Replace standard variable names first
+        console.log('Original formula:', formula);
+        
+        // Enhanced formula preprocessing
+        // Handle mathematical expressions in Spanish/common formats
         sanitizedFormula = sanitizedFormula
-            .replace(/\b(tenderBudget|P_lic|PBL|LICITACION)\b/gi, 'tenderBudget')
-            .replace(/\b(price|OFERTA_A_VALORAR)\b/gi, 'price')
-            .replace(/\b(lowestPrice|P_min|O_baja|P_baja|OFERTA_BAJA|O_min)\b/gi, 'lowestPrice')
-            .replace(/\b(maxScore|P_max|U_max|PUNTOS_MAXIMOS)\b/gi, 'maxScore');
+            // Handle roots first (most specific to least specific)
+            .replace(/raíz\s+sexta\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/6)')
+            .replace(/raíz\s+quinta\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/5)')
+            .replace(/raíz\s+cuarta\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/4)')
+            .replace(/raíz\s+cúbica\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/3)')
+            .replace(/raíz\s+cuadrada\s+de\s*\(([^)]+)\)/gi, 'Math.sqrt($1)')
+            .replace(/raíz\s+a\s+la\s+(\d+)\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($2), 1/$1)')
+            .replace(/raiz\s+sexta\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/6)')
+            .replace(/raiz\s+quinta\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/5)')
+            .replace(/raiz\s+cuarta\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/4)')
+            .replace(/raiz\s+cubica\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($1), 1/3)')
+            .replace(/raiz\s+cuadrada\s+de\s*\(([^)]+)\)/gi, 'Math.sqrt($1)')
+            .replace(/raiz\s+a\s+la\s+(\d+)\s+de\s*\(([^)]+)\)/gi, 'Math.pow(($2), 1/$1)')
+            .replace(/√\s*\(([^)]+)\)/gi, 'Math.sqrt($1)')
+            
+            // Handle exponents
+            .replace(/elevado\s+a\s+(\d+(?:\.\d+)?)/gi, '**$1')
+            .replace(/\^(\d+(?:\.\d+)?)/g, '**$1')
+            .replace(/\*\*(\d+(?:\.\d+)?)/g, (match, exp) => `**${exp}`)
+            
+            // Handle division expressions
+            .replace(/\s+entre\s+/gi, ' / ')
+            .replace(/\s+dividido\s+por\s+/gi, ' / ')
+            .replace(/\s+dividido\s+entre\s+/gi, ' / ')
+            
+            // Handle multiplication expressions
+            .replace(/\s+por\s+/gi, ' * ')
+            .replace(/\s+multiplicado\s+por\s+/gi, ' * ')
+            
+            // Clean up extra spaces
+            .replace(/\s+/g, ' ');
 
-        // Replace single letter variables A, B, C carefully.
-        // A = tenderBudget, B = price, C = lowestPrice
-        // Replace C, then B, then A to avoid conflicts.
+        console.log('After math preprocessing:', sanitizedFormula);
+        
+        // Enhanced variable replacement - more comprehensive mapping
+        sanitizedFormula = sanitizedFormula
+            // Tender budget variations (most specific first)
+            .replace(/\b(presupuesto_base_licitacion|presupuesto_licitacion|presupuesto_base|PBL|VEC|valor_estimado_contrato|P_lic|LICITACION|presupuesto|budget)\b/gi, 'tenderBudget')
+            
+            // Price/offer variations
+            .replace(/\b(precio_oferta|oferta_evaluar|oferta_valorar|OFERTA_A_VALORAR|precio_i|P_i|Pi|Pe|oferta|precio)\b/gi, 'price')
+            
+            // Lowest price variations
+            .replace(/\b(precio_minimo|oferta_minima|oferta_baja|precio_mas_bajo|P_min|P_minimo|O_baja|P_baja|OFERTA_BAJA|O_min|minimo|min_price)\b/gi, 'lowestPrice')
+            
+            // Max score variations
+            .replace(/\b(puntuacion_maxima|puntos_maximos|puntuacion_max|P_max|P_maxima|U_max|PUNTOS_MAXIMOS|puntos_max|maxima|max_puntos)\b/gi, 'maxScore')
+            
+            // Handle single letter variables (be very careful with order)
+            // Replace in reverse alphabetical order to avoid conflicts
+            .replace(/\bZ\b/g, 'lowestPrice')  // Sometimes Z is used for minimum
+            .replace(/\bY\b/g, 'price')        // Sometimes Y is used for offer
+            .replace(/\bX\b/g, 'tenderBudget') // Sometimes X is used for budget
+            .replace(/\bU\b/g, 'maxScore')     // U often represents max score
+            .replace(/\bL\b/g, 'tenderBudget') // L for "Licitación"
+            .replace(/\bO\b/g, 'price')        // O for "Oferta"
+            .replace(/\bP\b(?!rice|_)/g, 'price') // P for "Precio" but not "Price" or "P_"
+            
+            // Handle A, B, C pattern (most common)
+            // C = lowest price, B = current price, A = tender budget
         sanitizedFormula = sanitizedFormula
             .replace(/\bC\b/g, 'lowestPrice')
             .replace(/\bB\b/g, 'price')
-            .replace(/\bA\b/g, 'tenderBudget');
+            .replace(/\bA\b/g, 'tenderBudget')
             
-        // Replace other common variables
-        sanitizedFormula = sanitizedFormula
-            .replace(/\b(P_i|O_i|OFERTA|O|P)\b/gi, 'price')
-            .replace(/\bL\b/gi, 'tenderBudget');
+            // Clean up any remaining underscores and normalize
+            .replace(/_/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
 
+        console.log('After variable replacement:', sanitizedFormula);
 
-        // Sandboxed evaluation
-        const score = new Function('price', 'tenderBudget', 'maxScore', 'lowestPrice', `return ${sanitizedFormula}`)(price, tenderBudget, maxScore, lowestPrice);
+        // Enhanced sandboxed evaluation with better error handling
+        const evaluationFunction = new Function(
+            'price', 
+            'tenderBudget', 
+            'maxScore', 
+            'lowestPrice', 
+            'Math',
+            `
+            try {
+                const result = ${sanitizedFormula};
+                if (typeof result !== 'number' || !isFinite(result)) {
+                    throw new Error('Formula result is not a valid number');
+                }
+                return result;
+            } catch (e) {
+                console.error('Formula evaluation error:', e);
+                throw e;
+            }
+            `
+        );
         
-        if (typeof score !== 'number' || !isFinite(score)) return 0;
+        const score = evaluationFunction(price, tenderBudget, maxScore, lowestPrice, Math);
+        
+        console.log('Calculated score:', score);
+        
+        if (typeof score !== 'number' || !isFinite(score) || score < 0) {
+            throw new Error('Invalid score result');
+        }
+        
         return Math.max(0, Math.min(score, maxScore));
 
     } catch (error) {
-        console.error("Error evaluating economic formula:", error);
-        // Fallback to simple logic on error
-        if (lowestPrice > 0 && price > 0 && tenderBudget > 0 && price <= tenderBudget) {
-            return Math.min(maxScore, (lowestPrice / price) * maxScore);
-        }
-        return 0;
+        console.error("Error evaluating economic formula:", error, "Formula:", formula);
+        // Enhanced fallback logic
+        return lowestPrice > 0 && price <= tenderBudget 
+            ? Math.min(maxScore, (lowestPrice / price) * maxScore) 
+            : 0;
     }
 };
 

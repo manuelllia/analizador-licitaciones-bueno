@@ -20,17 +20,59 @@ Extrae únicamente la información verificable presente en los textos proporcion
 2.  **Si es por lotes:** Rellena el array 'lotes'. Para cada lote identificado, extrae: 'nombre', 'centroAsociado', 'descripcion', 'presupuesto' (string numérico sin IVA), y 'requisitosClave'.
 3.  **Si NO es por lotes:** El array 'lotes' debe quedar vacío ([]).
 
-**Análisis de Criterios de Adjudicación (MUY IMPORTANTE):**
+**Análisis de Criterios de Adjudicación y Fórmulas Económicas (CRÍTICO):**
 Busca exhaustivamente en el PCAP la sección que define los criterios de adjudicación del contrato.
 *   'puntuacionEconomica': El número MÁXIMO de puntos que se pueden obtener por el precio.
-*   'formulaEconomica': EXTRAE LA FÓRMULA MATEMÁTICA EXACTA para calcular la puntuación económica. Devuélvela como un string de JavaScript. Usa estas variables: 'price' para la oferta evaluada, 'tenderBudget' para el presupuesto de licitación, 'maxScore' para la puntuación máxima, y 'lowestPrice' para la oferta más baja. SI NO HAY FÓRMULA EXPLÍCITA, usa la fórmula por defecto: "maxScore * (lowestPrice / price)".
-    **Instrucciones para Fórmulas Complejas:**
-    *   La fórmula debe incluir la multiplicación por la puntuación máxima (maxScore).
-    *   Si la fórmula usa letras como A, B, C, tradúcelas a las variables estándar: A = tenderBudget, B = price, C = lowestPrice.
-    *   Si la fórmula es "Puntuación_maxima * (Raiz a la 6 de (A-B)/(A-C))", la salida debe ser: "maxScore * Math.pow(((tenderBudget - price) / (tenderBudget - lowestPrice)), 1/6)".
-    *   Traduce "Raiz a la N de X" como "Math.pow(X, 1/N)".
-    *   Traduce "X entre Y" como "(X / Y)".
-    *   Asegúrate de que el resultado final sea siempre una expresión matemática válida en JavaScript.
+*   'formulaEconomica': **ANÁLISIS EXHAUSTIVO DE FÓRMULAS MATEMÁTICAS**
+    
+    **PASO 1 - BÚSQUEDA INTENSIVA:**
+    Busca en TODO el documento cualquier mención de:
+    - "fórmula", "formula", "cálculo", "calculo", "puntuación económica", "puntuacion economica"
+    - "valoración económica", "valoracion economica", "criterio precio", "criterio económico"
+    - Expresiones matemáticas con símbolos: +, -, *, /, ^, √, raíz, exponente, potencia
+    - Variables como: P, A, B, C, X, Y, Z, Pi, Pe, Pm, Pmax, Pmin, etc.
+    - Fracciones, cocientes, divisiones expresadas como "entre", "dividido", "cociente"
+    - Raíces expresadas como: "raíz", "raiz", "√", "radical", "potencia de 1/n"
+    - Exponentes expresados como: "elevado a", "^", "potencia", "exponente"
+    
+    **PASO 2 - IDENTIFICACIÓN DE VARIABLES:**
+    Identifica qué representa cada variable en el contexto:
+    - Variables de precio de oferta: P, Pi, Pe, Precio_oferta, Oferta, O, B
+    - Variables de presupuesto: PBL, Presupuesto, A, Licitacion, L, VEC
+    - Variables de oferta más baja: Pmin, P_min, Oferta_baja, C, Min
+    - Variables de puntuación máxima: Pmax, P_max, Puntos_max, Maxima, U
+    
+    **PASO 3 - CONVERSIÓN A JAVASCRIPT:**
+    Convierte la fórmula encontrada usando estas variables estándar:
+    - 'price' = precio de la oferta a evaluar
+    - 'tenderBudget' = presupuesto base de licitación
+    - 'maxScore' = puntuación económica máxima
+    - 'lowestPrice' = precio de la oferta más baja
+    
+    **EJEMPLOS DE CONVERSIÓN:**
+    - "P_max * (P_min / P_i)" → "maxScore * (lowestPrice / price)"
+    - "U * raíz cuadrada de (A-B)/(A-C)" → "maxScore * Math.sqrt((tenderBudget - price) / (tenderBudget - lowestPrice))"
+    - "Puntos_max * ((PBL-Oferta)/(PBL-Oferta_baja))^0.5" → "maxScore * Math.pow((tenderBudget - price) / (tenderBudget - lowestPrice), 0.5)"
+    - "40 * raíz sexta de (A-B)/(A-C)" → "maxScore * Math.pow((tenderBudget - price) / (tenderBudget - lowestPrice), 1/6)"
+    - "P_max * (1 - (P_i - P_min)/(PBL - P_min))" → "maxScore * (1 - (price - lowestPrice) / (tenderBudget - lowestPrice))"
+    
+    **REGLAS DE CONVERSIÓN MATEMÁTICA:**
+    - "raíz cuadrada" o "√" → "Math.sqrt()"
+    - "raíz cúbica" → "Math.pow(x, 1/3)"
+    - "raíz n-ésima" o "raíz a la n" → "Math.pow(x, 1/n)"
+    - "elevado a n" o "^n" → "Math.pow(x, n)"
+    - "entre", "dividido por", "/" → "/"
+    - "por", "multiplicado por", "*" → "*"
+    - Paréntesis se mantienen igual
+    
+    **VALIDACIÓN FINAL:**
+    - La fórmula DEBE ser válida en JavaScript
+    - DEBE incluir 'maxScore' para escalar el resultado
+    - DEBE manejar casos donde price, tenderBudget, lowestPrice > 0
+    - Si no encuentras fórmula explícita, usa: "maxScore * (lowestPrice / price)"
+    
+    **IMPORTANTE:** Extrae la fórmula EXACTA del documento, no inventes ni simplifiques.
+
 *   'umbralBajaTemeraria': Describe las condiciones para que una oferta sea considerada anormalmente baja o temeraria.
 *   'criteriosAutomaticos': Array con criterios evaluables por fórmula (descripción y puntuación).
 *   'criteriosSubjetivos': Array con criterios de juicio de valor (descripción y puntuación).
