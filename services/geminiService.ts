@@ -97,12 +97,14 @@ Tu tarea más crítica es actuar como un estratega de licitaciones. No te limite
 
 **ANÁLISIS CRÍTICO DE COSTES SALARIALES:**
 Para el campo \`costesEstimados\` del personal, realiza un análisis detallado y realista:
-1. **Identifica el número exacto de trabajadores** requeridos en el documento
+1. **Identifica el número exacto de trabajadores** requeridos en el documento por cada puesto específico
 2. **Calcula salarios anuales realistas** para cada puesto:
    - Técnicos de electromedicina: 25.000-35.000€ anuales
    - Ingenieros biomédicos: 35.000-50.000€ anuales
    - Responsables/coordinadores: 40.000-60.000€ anuales
    - Personal administrativo: 20.000-30.000€ anuales
+   - Técnicos especialistas: 28.000-38.000€ anuales
+   - Jefes de servicio: 50.000-70.000€ anuales
 3. **Incluye cargas sociales** (aproximadamente 30% adicional sobre salario bruto)
 4. **Multiplica por el número de trabajadores** de cada categoría
 5. **El resultado debe ser un valor numérico realista** (ej: "180000" para 5 trabajadores)
@@ -111,6 +113,17 @@ Para el campo \`costesEstimados\` del personal, realiza un análisis detallado y
 - 2 Técnicos: 2 × 30.000€ × 1.30 (cargas) = 78.000€
 - 1 Ingeniero: 1 × 45.000€ × 1.30 = 58.500€
 - Total anual: 136.500€ → Valor a incluir: "136500"
+
+**DESGLOSE DETALLADO DE PERSONAL:**
+Para el campo \`totalTrabajadores\`, proporciona el número total (ej: "5").
+Para el campo \`desglosePorPuesto\`, proporciona un desglose detallado y específico como:
+"2 Técnicos de Electromedicina, 1 Ingeniero Biomédico Senior, 1 Responsable de Servicio, 1 Técnico Especialista en Equipos de Imagen"
+
+**IMPORTANTE:** El desglose debe ser específico y detallado, mencionando:
+- El número exacto para cada puesto
+- El nombre completo y específico del puesto (no genérico)
+- Las especialidades cuando sea relevante
+- Los niveles de experiencia (junior, senior, etc.) si se especifican en el documento
 **En resumen, para \`costesDetalladosRecomendados\`, no me des una estimación de los costes reales, sino el desglose de una oferta económica optimizada y estratégica que nos recomiendas presentar.**
 
 Regla general: Si un dato no se encuentra, usa "No especificado en los documentos" para strings y arrays vacíos para listas. Para los costes recomendados, omite los campos que no puedas estimar.
