@@ -176,7 +176,6 @@ const ScoringAnalysis: React.FC<ScoringAnalysisProps> = ({ scoringCriteria }) =>
                                             </div>
                                         )}
                                         </div>
-                                    </div>
                                 ))
                             ) : (
                                 <p className="text-xs sm:text-sm text-slate-500 text-center py-4">No se encontraron criterios automáticos en el documento.</p>
